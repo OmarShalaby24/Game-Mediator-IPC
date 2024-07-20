@@ -8,14 +8,14 @@ package com.example;
 public class PlayerMediator implements Mediator {
     @Override
     public void sendMessage(Player sender, Player recipient, String message) {
-        sender.printSentMessage(recipient, message);
+        sender.printSentMessage(message);
         recipient.receiveMessage(sender, message);
     }
 
     @Override
     public void receiveMessage(Player sender, Player recipient, String message) {
         if(recipient.getMessageCounter() <= 10){
-            recipient.printReceivedMessage(sender, message);
+            recipient.printReceivedMessage(message);
             String response = message + " " + recipient.getMessageCounter();
             recipient.sendMessage(sender, response);
         }
