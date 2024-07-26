@@ -16,8 +16,8 @@ public class CommonProcess {
         System.out.println("-".repeat(76));
 
         PlayerMediator mediator = new PlayerMediator();
-        Player player1 = new Player("initiator", mediator);
-        Player player2 = new Player("player 2", mediator);
+        PlayerClass player1 = new PlayerClass("initiator", mediator);
+        PlayerClass player2 = new PlayerClass("player 2", mediator);
 
         player1.sendMessage(player2, "Hi");
     }

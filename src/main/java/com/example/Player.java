@@ -1,36 +1,24 @@
 package com.example;
 
-/**
- * Player class(Concrete Colleague) is responsible to create instance of player
- * in construction. it assigns name, and mediator to the player and set the messageCount to 0
- * when player wants to send/receive a message. he communicates with the mediator to send the message
- */
-
-public class Player {
+abstract class Player {
     private final String name;
-    private int messageCounter;
-    private final Mediator mediator;
+    private int messageCount;
 
-    public Player(String name, Mediator mediator){
+    public Player(String name) {
         this.name = name;
-        this.messageCounter = 0;
-        this.mediator = mediator;
+        messageCount = 0;
     }
 
-    public int getMessageCounter() {
-        return messageCounter;
+    public String getName() {
+        return this.name;
     }
-
-    public void sendMessage(Player recipient, String message){
-        this.mediator.sendMessage(this, recipient, message);
+    public int getMessageCount(){
+        return this.messageCount;
     }
-
-
-    public void receiveMessage(Player sender, String message){
-        this.messageCounter++;
-        mediator.receiveMessage(sender, this, message);
+    public void incrementMessageCount(){
+        this.messageCount++;
     }
-
+    
     public void printSentMessage(String message){
         System.out.println(this.name + " \tsent: \t\t" + message);
     }

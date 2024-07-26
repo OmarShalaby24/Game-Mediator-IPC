@@ -12,23 +12,27 @@ import java.net.*;
  * "player 2" responds with the same message appended with a counter.
  * "initiator" then sends the received message back to "player 2" and the process continues until the counter reaches 10.
  */
-public class PlayerProcess {
+public class PlayerProcess extends Player{
     /**
      * each process (player) has a message counter that increments with each message received
      * and a name that identifies the process as either a player or an initiator
      */
-    private static int messageCounter = 0;
-    private static String name;
     private static final long processId = ProcessHandle.current().pid();
+
+    public PlayerProcess(String name) {
+        super(name);
+    }
+    static Player player;
+
     public static void main(String[] args) {
         // if the first argument is "initiator" then the process is an initiator
         if (args.length > 0 && args[0].equals("initiator")){
-            name = "initiator";
+            player = new PlayerProcess("initiator");
             startClient();
         }
         // if the first argument is not "initiator" then the process is a player
         else{
-            name = "player 2";
+            player = new PlayerProcess("player 2");
             startServer();
         }
     }
@@ -38,13 +42,13 @@ public class PlayerProcess {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))){
             out.println("Hi");
-            System.out.println("PID("+processId+") \t" + name + " \tSent: \t\tHi");
+            System.out.println("PID("+processId+") \t" + player.getName() + " \tSent: \t\tHi");
             String receivedMessage;
-            while ((receivedMessage = in.readLine()) != null && messageCounter < 10){
-                System.out.println("PID("+processId+") \t" + name + " \tReceived: \t" + receivedMessage);
-                messageCounter++;
-                System.out.println("PID("+processId+") \t" + name + " \tSent: \t\t" + receivedMessage + " " + messageCounter);
-                out.println(receivedMessage + " " + messageCounter);
+            while ((receivedMessage = in.readLine()) != null && player.getMessageCount() < 10){
+                System.out.println("PID("+processId+") \t" + player.getName() + " \tReceived: \t" + receivedMessage);
+                player.incrementMessageCount();
+                System.out.println("PID("+processId+") \t" + player.getName() + " \tSent: \t\t" + receivedMessage + " " + player.getMessageCount());
+                out.println(receivedMessage + " " + player.getMessageCount());
             }
         }
         catch (IOException e){
@@ -53,16 +57,16 @@ public class PlayerProcess {
     }
 
     public static void startServer(){
-        try(ServerSocket serverScoket = new ServerSocket(5000);
-            Socket clientSocket = serverScoket.accept();
+        try(ServerSocket serverSocket = new ServerSocket(5000);
+            Socket clientSocket = serverSocket.accept();
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(),true);
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))){
             String receivedMessage;
-            while((receivedMessage = in.readLine()) != null && messageCounter < 10){
-                System.out.println("PID("+processId+") \t" + name + " \tReceived: \t" + receivedMessage);
-                messageCounter++;
-                System.out.println("PID("+processId+") \t" + name + " \tSent: \t\t" + receivedMessage + " " + messageCounter);
-                out.println(receivedMessage + " " + messageCounter);
+            while((receivedMessage = in.readLine()) != null && player.getMessageCount() < 10){
+                System.out.println("PID("+processId+") \t" + player.getName() + " \tReceived: \t" + receivedMessage);
+                player.incrementMessageCount();
+                System.out.println("PID("+processId+") \t" + player.getName() + " \tSent: \t\t" + receivedMessage + " " + player.getMessageCount());
+                out.println(receivedMessage + " " + player.getMessageCount());
             }
         }
         catch (IOException e){

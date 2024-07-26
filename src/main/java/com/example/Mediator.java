@@ -8,6 +8,6 @@ package com.example;
  */
 
 public interface Mediator {
-    void sendMessage(Player sender, Player recipient, String message);
-    void receiveMessage(Player sender, Player recipient, String message);
+    void sendMessage(PlayerClass sender, PlayerClass recipient, String message);
+    void receiveMessage(PlayerClass sender, PlayerClass recipient, String message);
 }

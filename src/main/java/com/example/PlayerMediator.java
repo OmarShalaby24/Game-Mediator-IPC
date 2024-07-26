@@ -7,16 +7,16 @@ package com.example;
 
 public class PlayerMediator implements Mediator {
     @Override
-    public void sendMessage(Player sender, Player recipient, String message) {
+    public void sendMessage(PlayerClass sender, PlayerClass recipient, String message) {
         sender.printSentMessage(message);
         recipient.receiveMessage(sender, message);
     }
 
     @Override
-    public void receiveMessage(Player sender, Player recipient, String message) {
-        if(recipient.getMessageCounter() <= 10){
+    public void receiveMessage(PlayerClass sender, PlayerClass recipient, String message) {
+        if(recipient.getMessageCount() <= 10){
             recipient.printReceivedMessage(message);
-            String response = message + " " + recipient.getMessageCounter();
+            String response = message + " " + recipient.getMessageCount();
             recipient.sendMessage(sender, response);
         }
     }
